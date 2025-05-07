@@ -5,110 +5,40 @@
   <title>Which Ghibli Character Are You?</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .character-img {
-      max-width: 500px;
-      border-radius: 10px;
-    }
-    
-    @font-face {
-      font-family: 'Luna';
-      src: url('assets/fonts/Luna.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    /* Use more styles as needed */
-  
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4">
+  <div id="app" class="container">
+    <h1 class="text-center mb-4" style="font-family: 'Luna';">Which Ghibli Character Are You?</h1>
+    
+    <!-- Checkbox Section -->
+    <div class="row">
+      <div class="col-md-4" v-for="trait in availableTraits" :key="trait">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" :id="trait" :value="trait" v-model="selectedTraits">
+          <label class="form-check-label" :for="trait">{{ trait }}</label>
+        </div>
+      </div>
+    </div>
 
-  <!-- Complete this part -->
+    <!-- Button -->
+    <div class="text-center mt-4">
+      <button class="btn btn-primary" @click="findCharacter">Reveal My Character</button>
+    </div>
 
-<script>
-Vue.createApp({
-  data() {
-    return {
-      /* complete this part */
-      characters: [
-        {
-          name: 'Totoro',
-          traits: ['Kind', 'Quiet', 'Protective', 'Empathetic'],
-          image: 'assets/totoro.png',
-          description: 'Totoro is a gentle forest spirit who watches over children and brings joy and magic.'
-        },
-        {
-          name: 'Kiki',
-          traits: ['Brave', 'Adventurous', 'Independent', 'Hardworking'],
-          image: 'assets/kiki.webp',
-          description: 'Kiki is a young witch-in-training, brave and eager to find her place in the world.'
-        },
-        {
-          name: 'Chihiro',
-          traits: ['Curious', 'Brave', 'Kind', 'Empathetic'],
-          image: 'assets/chihiro.png',
-          description: 'Chihiro overcomes fear and shows great courage and kindness in a magical world.'
-        },
-        {
-          name: 'Calcifer',
-          traits: ['Mischievous', 'Protective', 'Witty'],
-          image: 'assets/calcifer.jpeg',
-          description: 'Calcifer is a fiery, funny spirit with a strong personality and a warm heart... literally!'
-        },
-        {
-          name: 'Howl',
-          traits: ['Mysterious', 'Brave', 'Dreamy', 'Witty'],
-          image: 'assets/howl.jpg',
-          description: 'Howl is a charming and enigmatic wizard who learns to love and protect selflessly.'
-        },
-        {
-          name: 'San',
-          traits: ['Brave', 'Loyal', 'Independent', 'Protective'],
-          image: 'assets/san.jpg',
-          description: 'San is a fierce warrior raised by wolves, deeply connected to nature and loyalty.'
-        },
-        {
-          name: 'Ponyo',
-          traits: ['Curious', 'Dreamy', 'Mischievous', 'Funny', 'Magical'],
-          image: 'assets/ponyo.jpeg',
-          description: 'Ponyo is a magical fish-girl with an adventurous heart and love for the surface world.'
-        },
-        {
-          name: 'Arrietty',
-          traits: ['Curious', 'Adventurous', 'Brave', 'Ambitious'],
-          image: 'assets/arrietty.webp',
-          description: 'Arrietty is a tiny borrower who dreams of exploring the world beyond her home.'
-        }
-      ],
-      result: null,
-      noResult: false
-    }
-  },
-  methods: {
-    findCharacter() {
-      this.result = null;
-      this.noResult = false;
+    <!-- Result -->
+    <div v-if="result" class="text-center mt-4">
+      <h2>You are most like {{ result.name }}!</h2>
+      <img :src="result.image" class="img-fluid character-img mt-3">
+      <p class="mt-3">{{ result.description }}</p>
+    </div>
 
-      let bestMatch = null;
-      let highestScore = 0;
+    <!-- No Result -->
+    <div v-else-if="noResult" class="alert alert-warning text-center mt-4">
+      Hmm...Either you didn't select any traits or we couldn't find a match. Please try again.
+    </div>
+  </div>
 
-      for (const char of this.characters) {
-        const matchCount = char.traits.filter(trait => this.selectedTraits.includes(trait)).length;
-        if (matchCount > highestScore) {
-          bestMatch = char;
-          highestScore = matchCount;
-        }
-      }
-
-      if (bestMatch && highestScore > 0) {
-        this.result = bestMatch;
-      } else {
-        this.noResult = true;
-      }
-    }
-  }
-}).mount("#app");
-</script>
+  <script src="main.js"></script>
 </body>
 </html>
